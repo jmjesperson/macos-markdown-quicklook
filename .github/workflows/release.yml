@@ -1,10 +1,14 @@
-# On a v* tag: run CI on the tagged commit, then build the release zip and publish it as a GitHub
+# On a vMAJOR.MINOR.PATCH tag (optionally -PRERELEASE): run CI on the tagged commit, then build the release zip and publish it as a GitHub
 # release with notes from CHANGELOG.md. Nothing is built or uploaded unless CI passes.
 name: Release
 
 on:
   push:
-    tags: ['v*']
+    # Glob filters, not regexes: they skip stray tags such as v-test. The step "Tag matches the app
+    # version" does the strict semantic-version check.
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
 
 permissions:
   contents: read
@@ -34,11 +38,19 @@ jobs:
       - name: Tag matches the app version
         run: |
           VERSION=$(python3 -c 'import json; print(json.load(open("scripts/xcodeproj-config.json"))["version"])')
+          # Semantic Versioning 2.0.0 core and pre-release, without build metadata (a tag has no use for it).
+          SEMVER='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-((0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(\.(0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*))?$'
+          if ! [[ "$VERSION" =~ $SEMVER ]]; then
+            echo "::error::Version $VERSION in scripts/xcodeproj-config.json is not a semantic version (MAJOR.MINOR.PATCH[-PRERELEASE])"
+            exit 1
+          fi
           if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
             echo "::error::Tag $GITHUB_REF_NAME does not match version $VERSION in scripts/xcodeproj-config.json"
             exit 1
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          # A pre-release suffix (v0.2.0-beta.1) publishes a GitHub pre-release.
+          if [[ "$VERSION" == *-* ]]; then echo "PRERELEASE=--prerelease" >> "$GITHUB_ENV"; else echo "PRERELEASE=" >> "$GITHUB_ENV"; fi
 
       - name: Build release zip
         run: scripts/build-release.sh
@@ -54,8 +66,8 @@ jobs:
           ZIP="build/release/MarkdownQuicklook-$VERSION.zip"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
-            gh release edit "$GITHUB_REF_NAME" --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md
+            gh release edit "$GITHUB_REF_NAME" --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md $PRERELEASE
           else
             gh release create "$GITHUB_REF_NAME" "$ZIP" \
-              --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md --verify-tag
+              --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md --verify-tag $PRERELEASE
           fi
