@@ -50,6 +50,7 @@ The project uses GitHub flow: `main` is always releasable, and every change land
 
 - **Pull requests and pushes to `main`** run [`ci.yml`](.github/workflows/ci.yml) on a GitHub macOS runner with Xcode 26.6. It checks the Xcode project matches its generator config, runs the renderer tests, and runs `scripts/build-release.sh`.
 - **A `v*` tag** runs [`release.yml`](.github/workflows/release.yml). It reruns CI on the tagged commit and checks the tag matches the app version. Then it builds the zip and publishes a GitHub release, with notes from that version's `CHANGELOG.md` section (`scripts/release-notes.sh`). If CI fails, nothing is built or uploaded.
+- **A newer run for the same trigger cancels the one in progress:** another push to the same PR, another push to `main`, or the same tag pushed again. Publishing is safe to rerun: if the release already exists, its zip and notes are replaced.
 
 To release a new version:
 

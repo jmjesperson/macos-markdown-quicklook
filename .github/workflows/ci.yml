@@ -11,13 +11,15 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
   test:
     name: Test and build
+    # A new run for the same trigger and ref (another push to a PR, to main, or a re-pushed tag)
+    # cancels the one in progress. Set on the job, with a "ci-" prefix, so that when release.yml calls
+    # this workflow the group can't collide with the release's own group and cancel it.
+    concurrency:
+      group: ci-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: true
     # Apple silicon, Xcode 26.6 (17F113): the toolchain the project is developed with.
     runs-on: macos-26
     timeout-minutes: 30
