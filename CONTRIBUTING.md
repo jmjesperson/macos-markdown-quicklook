@@ -61,6 +61,8 @@ GitHub doesn't let a pull request's author approve it, so the maintainer merges 
    git push origin vX.Y.Z
    ```
 
+To rehearse a release first, run the workflow by hand: `gh workflow run release.yml --ref <branch>`, or **Actions › Release › Run workflow**. A manual run does everything except publish, and keeps the zip and notes as a downloadable artifact for 7 days.
+
 The Release workflow reruns CI and checks that the tag matches the version. It then builds the zip and publishes the release with notes from `CHANGELOG.md`. A tag with a suffix, such as `v0.2.0-beta.1`, publishes a pre-release. Don't upload release zips by hand.
 
 ### When CI is broken by something outside the code
