@@ -1,0 +1,28 @@
+/* Page layout around github-markdown-css, as its readme recommends, plus what GitHub's own site CSS
+   adds for elements this renderer produces. Colours come from github-markdown-css's variables. */
+:root { color-scheme: light dark; }
+/* The canvas behind the article: github-markdown-css's --bgColor-default for each scheme. */
+html { background-color: #ffffff; }
+@media (prefers-color-scheme: dark) { html { background-color: #0d1117; } }
+body { margin: 0; }
+.markdown-body { box-sizing: border-box; min-width: 200px; max-width: 980px; margin: 0 auto; padding: 32px; }
+@media (max-width: 767px) { .markdown-body { padding: 16px; } }
+
+/* Mentions, issue references and commit SHAs: styled as GitHub styles them, but not links. */
+.markdown-body .user-mention, .markdown-body .team-mention { font-weight: var(--base-text-weight-semibold, 600); color: var(--fgColor-default); }
+.markdown-body .issue-link { color: var(--fgColor-accent); }
+.markdown-body .commit-link { color: var(--fgColor-accent); }
+.markdown-body .commit-link tt { font-family: var(--fontStack-monospace); font-size: 85%; padding: .2em .4em; border-radius: 6px; background-color: var(--bgColor-neutral-muted); }
+
+/* Front matter table. */
+.markdown-body > table:first-child th { text-align: left; }
+
+/* highlight.js themes paint their own background; keep GitHub's code-block background instead. */
+.markdown-body pre code.hljs { background: transparent; padding: 0; overflow: visible; }
+
+/* Mermaid diagrams. */
+.markdown-body .mermaid-diagram { margin-bottom: var(--base-size-16, 16px); }
+.markdown-body .mermaid-diagram svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.markdown-body .mermaid-diagram[data-state="pending"] pre { display: none; }
+.markdown-body .mermaid-diagram[data-state="pending"]::before { content: "Rendering diagram…"; color: var(--fgColor-muted); }
+.markdown-body .mermaid-error { color: var(--fgColor-danger); margin-bottom: 8px; }

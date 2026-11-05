@@ -100,11 +100,15 @@ Inline links, autolinked URLs and relative links to other files SHALL render as 
 - **THEN** "@octocat" renders bold, as GitHub styles mentions, and is not a link
 
 ### Requirement: YAML front matter
-A YAML front-matter block at the very top of a file SHALL render as a table of its keys and values above the document, not as body text. `[UNVERIFIED — that GitHub renders front matter as a table; confirm before building and update this requirement if not]`
+A YAML front-matter block at the very top of a file SHALL render as a table above the document, not as body text, laid out as GitHub lays it out: one row per top-level key with the key in a header cell and the value beside it; a nested mapping as a table whose header row holds its keys; a list as a one-row table of its items. GitHub's file view renders front matter this way (https://github.com/github/docs/blob/main/content/index.md, checked 2026-11-05).
 
 #### Scenario: README with front matter
 - **WHEN** a file begins with `---`, `title: Guide`, `---`
 - **THEN** a table with the row `title | Guide` renders above the document body
+
+#### Scenario: Nested front matter
+- **WHEN** the front matter holds `tags:` with the list items `one` and `two`
+- **THEN** the `tags` row's value is a one-row table with the cells `one` and `two`
 
 ### Requirement: Deferred blocks render as code
 Fenced blocks tagged `math`, `geojson`, `topojson` or `stl`, and `$…$` or `$$…$$` math, SHALL render as their source text, the fenced ones as plain code blocks, until a later change adds them.

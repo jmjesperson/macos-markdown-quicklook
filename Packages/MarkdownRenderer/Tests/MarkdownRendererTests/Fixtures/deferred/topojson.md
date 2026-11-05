@@ -1,0 +1,3 @@
+```topojson
+{"type": "Topology", "objects": {}}
+```

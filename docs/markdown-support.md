@@ -17,8 +17,8 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 | Element | Example | GitHub | Status | Notes |
 |---|---|---|---|---|
 | Headings | `# Title` to `###### Title` | Yes [B] | v1 | |
-| Section anchors | `[see setup](#setup)` | Yes [B] | v1 | Generate heading IDs the way GitHub does so in-page links resolve. |
-| Custom anchors | `<a name="here"></a>` | Yes [B] | v1 | |
+| Section anchors | `[see setup](#setup)` | Yes [B] | v1 | Generate heading IDs the way GitHub does so in-page links resolve. As on GitHub, every `id` and `name` gets a `user-content-` prefix; `#` links get the same prefix, so they resolve without GitHub's page script. |
+| Custom anchors | `<a name="here"></a>` | Yes [B] | v1 | Written as `name="user-content-here"`, as on GitHub. |
 | Bold, italic, bold and italic | `**b**`, `*i*`, `***bi***` | Yes [B] | v1 | |
 | Strikethrough | `~~old~~` | Yes [B] | v1 | GFM extension in cmark-gfm. |
 | Subscript, superscript, underline | `<sub>`, `<sup>`, `<ins>` | Yes [B] | v1 | Inline HTML. |
@@ -29,7 +29,7 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 | Backslash escapes | `\*not italic\*` | Yes [B] | v1 | |
 | Hidden comments | `<!-- note -->` | Yes [B] | v1 | Not shown. |
 | Collapsed sections | `<details><summary>` | Yes [A] | v1 | |
-| Emoji shortcodes | `:rocket:` | Yes [B] | v1 | Needs a shortcode table bundled in the app. |
+| Emoji shortcodes | `:rocket:` | Yes [B] | v1 | Bundled table from gemoji v4.1.0. GitHub's image-only custom emoji (`:octocat:`, `:shipit:`) stay as text, because GitHub serves them as images from its CDN. |
 | Footnotes | `text[^1]` and `[^1]: note` | Yes [B] | v1 | cmark-gfm parser option. |
 
 ## Lists and tables
@@ -54,11 +54,11 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 
 | Element | Example | GitHub | Status | Notes |
 |---|---|---|---|---|
-| Inline links | `[text](https://…)` | Yes [B] | Partial | Rendered as links. Whether a click opens the browser from Quick Look is `[UNVERIFIED — test in the spike]`; MarkEdit reports links do not open from its web-view preview (https://github.com/MarkEdit-app/MarkEdit/issues/1718). |
+| Inline links | `[text](https://…)` | Yes [B] | Partial | Rendered as links. In the 2026-11-05 spike a click under `qlmanage -p` opened the default browser (`docs/spike-notes.md`); the Finder space-bar preview is `[UNVERIFIED — Jonny to click a link once]`. MarkEdit reports links do not open from its web-view preview (https://github.com/MarkEdit-app/MarkEdit/issues/1718). |
 | Autolinked URLs | `https://example.com` | Yes [B] | v1 | GFM extension in cmark-gfm. Same click caveat as inline links. |
 | Relative links to files | `[guide](docs/guide.md)` | Yes [B] | Partial | Shown as links. Opening another file from a preview is not expected to work. |
-| Images | `![alt](https://…)` | Yes [B] | Partial | Remote images need network access in the sandbox; the extension holds the network-client entitlement anyway (see the design). Whether remote images load is `[UNVERIFIED — test in the spike]`. |
-| Relative images | `![alt](./img/a.png)` | Yes [B] | v1 | The sandbox blocks reading neighbouring files directly. Planned approach: read the image in Swift and pass it as a `cid:` attachment on the preview reply (Apple: https://developer.apple.com/documentation/quicklook/qlpreviewreply/attachments). |
+| Images | `![alt](https://…)` | Yes [B] | Partial | Remote `https:` images load: the extension holds the network-client entitlement and the page's policy admits `https:` images (checked in Quick Look on 2026-11-05). `http:` images are blocked by that policy. They are fetched from the image's host directly, where GitHub proxies them through its own image cache. |
+| Relative images | `![alt](./img/a.png)` | Yes [B] | v1 | Read in Swift and attached to the preview reply as `cid:` data (Apple: https://developer.apple.com/documentation/quicklook/qlpreviewreply/attachments). A leading `/` resolves against the nearest folder holding `.git`. Symlinks are followed if the target is also an image file. Files outside the home folder, files over 10 MB, non-image files, and images past a 50 MB total for the page render as alt text (`docs/spike-notes.md`). |
 | Picture element | `<picture><source media="(prefers-color-scheme: dark)">` | Yes [B] | v1 | Common in READMEs for light and dark logos. |
 
 ## GitHub-only references
@@ -84,8 +84,8 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 | STL 3D models | ```` ```stl ```` | Yes [D] | Later | Jonny, 2026-11-05. |
 | Math | `$x$`, `$$…$$`, ```` ```math ```` | Yes, rendered with MathJax [M] | Later | Jonny, 2026-11-05. |
 
-## Not yet confirmed
+## Front matter
 
 | Element | Example | GitHub | Status | Notes |
 |---|---|---|---|---|
-| YAML front matter | `---` block at the top | `[UNVERIFIED — GitHub's front-matter rendering is not on the pages above]` | v1 (proposed) | Proposed: show it as a table, if GitHub does; otherwise hide it. Confirm GitHub's behaviour before building. |
+| YAML front matter | `---` block at the top | Yes, as a table (file view of https://github.com/github/docs/blob/main/content/index.md, checked 2026-11-05) | v1 | One row per top-level key (`<th>` key, `<td>` value); a nested mapping is a table with its keys as the header row; a list is a one-row table. Flow collections (`[a, b]`) show as text. |

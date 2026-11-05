@@ -28,6 +28,6 @@ None. This is the project's first change.
 ## Impact
 
 - **New code:** an Xcode project with a macOS host app target and a Quick Look Preview Extension target, plus a Swift package holding the markdown-to-HTML step so it can be unit-tested without Quick Look.
-- **New dependencies:** `swift-markdown` (Apache-2.0, https://github.com/swiftlang/swift-markdown); Mermaid (bundled JavaScript); a syntax highlighter (bundled JavaScript, chosen in design); GitHub-style CSS (`github-markdown-css`, MIT, https://github.com/sindresorhus/github-markdown-css).
+- **New dependencies:** `swift-cmark`, GitHub's cmark-gfm (BSD-2-Clause, https://github.com/swiftlang/swift-cmark; replaces the `swift-markdown` named here originally, see design decision 3); Mermaid (bundled JavaScript); a syntax highlighter (bundled JavaScript, chosen in design); GitHub-style CSS (`github-markdown-css`, MIT, https://github.com/sindresorhus/github-markdown-css).
 - **Machine prerequisites:** full Xcode selected as the active developer directory. On 2026-11-05 this Mac reported `xcode-select` pointing at Command Line Tools, and `xcodebuild` failed until that is switched.
 - **Out of scope:** math, GeoJSON, TopoJSON and STL rendering; Finder thumbnails; editing; signing and notarization; Homebrew cask.

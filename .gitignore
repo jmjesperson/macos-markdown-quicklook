@@ -12,3 +12,7 @@ xcuserdata/
 
 # Release artifacts (published on GitHub Releases, not in git)
 *.zip
+
+# Swift Package Manager
+.build/
+.swiftpm/
