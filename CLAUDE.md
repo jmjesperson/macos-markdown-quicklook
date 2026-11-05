@@ -85,6 +85,7 @@ All live in `Sources/MarkdownRenderer/Resources/`: github-markdown-css, highligh
 - **What GitHub renders, and what this renders, is tracked row by row in `docs/markdown-support.md`.** Keep it in step with behaviour changes. Math, GeoJSON, TopoJSON and STL are deliberately deferred and render as plain code.
 - **The extension's sandbox read exception** is `temporary-exception.files.home-relative-path.read-only` = `/`, the narrowest one that let sibling images load. The spike results behind this and the other design choices are in `docs/spike-notes.md`.
 - **The app icon** is drawn by `scripts/make-icon.swift`. Run `scripts/make-app-icon.sh` to regenerate `App/Assets.xcassets/AppIcon.appiconset`.
+
 ## Workflow (read CONTRIBUTING.md)
 
 `CONTRIBUTING.md` is the source of truth for how changes reach `main` and how releases happen. The maintainer workflow there is the one to follow when working with Jonny. In short:
