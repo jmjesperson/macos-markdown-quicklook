@@ -1,0 +1,3 @@
+# Every change needs approval from the owner. The owner merges their own pull requests
+# with the ruleset bypass, since GitHub does not let a pull request's author approve it.
+* @jmjesperson
