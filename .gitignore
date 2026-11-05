@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Xcode
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+
+# Release artifacts (published on GitHub Releases, not in git)
+*.zip
