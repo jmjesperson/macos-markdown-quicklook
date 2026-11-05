@@ -85,9 +85,15 @@ All live in `Sources/MarkdownRenderer/Resources/`: github-markdown-css, highligh
 - **What GitHub renders, and what this renders, is tracked row by row in `docs/markdown-support.md`.** Keep it in step with behaviour changes. Math, GeoJSON, TopoJSON and STL are deliberately deferred and render as plain code.
 - **The extension's sandbox read exception** is `temporary-exception.files.home-relative-path.read-only` = `/`, the narrowest one that let sibling images load. The spike results behind this and the other design choices are in `docs/spike-notes.md`.
 - **The app icon** is drawn by `scripts/make-icon.swift`. Run `scripts/make-app-icon.sh` to regenerate `App/Assets.xcassets/AppIcon.appiconset`.
-- **GitHub flow:** `main` is always releasable, and changes land through pull requests from short-lived branches. `.github/workflows/ci.yml` runs on every PR and push to `main`: project-in-sync check, `swift test`, then `scripts/build-release.sh`. Keep it green.
-- **`main` is protected:** no direct or force pushes, and every PR needs a passing "Test and build" check plus code-owner approval. Jonny's own PRs merge with `gh pr merge --admin`, which bypasses only the approval rule. Always work on a branch.
-- **Releasing:** bump `version` in `scripts/xcodeproj-config.json`, regenerate the project, and move the `[Unreleased]` notes in `CHANGELOG.md` under the new version, all in a PR. After merging, push a `v<version>` tag; it must be a semantic version matching the config (`v0.2.0`, or `v0.2.0-beta.1`, which publishes a pre-release). `.github/workflows/release.yml` reruns CI, checks the tag matches the version, builds the zip and publishes the release; notes come from `scripts/release-notes.sh`, which joins the CHANGELOG section with `.github/release-install.md`. Don't upload release zips by hand. Releases are ad-hoc signed and not notarized, so the README covers clearing quarantine.
+## Workflow (read CONTRIBUTING.md)
+
+`CONTRIBUTING.md` is the source of truth for how changes reach `main` and how releases happen. The maintainer workflow there is the one to follow when working with Jonny. In short:
+
+- **Always work on a branch** (`<type>/<short-name>`) and open a pull request. `main` rejects direct pushes and force pushes for everyone, admins included.
+- **CI must be green first.** Merge Jonny's pull requests with `gh pr merge --admin --squash --delete-branch` only after "Test and build" has passed (`gh pr checks --watch`). `--admin` exists only because GitHub won't let an author approve their own pull request. It isn't a way around failing checks.
+- **Ask Jonny first** before merging, tagging a release, or changing repository settings or rulesets. Above all, ask before pausing the checks ruleset (the broken-CI procedure in `CONTRIBUTING.md`).
+- **Keep things current:** add user-visible changes to `[Unreleased]` in `CHANGELOG.md`, and keep `docs/markdown-support.md` in step with rendering changes.
+- **Releases come only from the Release workflow:** push a `vX.Y.Z` tag after the version-bump PR merges. `.github/workflows/release.yml` reruns CI, checks the tag matches `scripts/xcodeproj-config.json`, builds the zip, and publishes the release with notes from `scripts/release-notes.sh`, which combines the CHANGELOG section with `.github/release-install.md`. Releases are ad-hoc signed and not notarized, so the README covers clearing quarantine.
 
 ## Specs (OpenSpec)
 
