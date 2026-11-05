@@ -85,11 +85,8 @@ All live in `Sources/MarkdownRenderer/Resources/`: github-markdown-css, highligh
 - **What GitHub renders, and what this renders, is tracked row by row in `docs/markdown-support.md`.** Keep it in step with behaviour changes. Math, GeoJSON, TopoJSON and STL are deliberately deferred and render as plain code.
 - **The extension's sandbox read exception** is `temporary-exception.files.home-relative-path.read-only` = `/`, the narrowest one that let sibling images load. The spike results behind this and the other design choices are in `docs/spike-notes.md`.
 - **The app icon** is drawn by `scripts/make-icon.swift`. Run `scripts/make-app-icon.sh` to regenerate `App/Assets.xcassets/AppIcon.appiconset`.
-- **Releasing:**
-  1. Bump `version` in the generator config and regenerate the project.
-  2. Move the `[Unreleased]` notes in `CHANGELOG.md` under the new version.
-  3. Run `scripts/build-release.sh`, then commit, tag `v<version>`, and attach the zip to a GitHub release.
-  4. Releases are ad-hoc signed and not notarized, so the README covers clearing quarantine.
+- **GitHub flow:** `main` is always releasable, and changes land through pull requests from short-lived branches. `.github/workflows/ci.yml` runs on every PR and push to `main`: project-in-sync check, `swift test`, then `scripts/build-release.sh`. Keep it green.
+- **Releasing:** bump `version` in `scripts/xcodeproj-config.json`, regenerate the project, and move the `[Unreleased]` notes in `CHANGELOG.md` under the new version, all in a PR. After merging, push a `v<version>` tag; it must be a semantic version matching the config (`v0.2.0`, or `v0.2.0-beta.1`, which publishes a pre-release). `.github/workflows/release.yml` reruns CI, checks the tag matches the version, builds the zip and publishes the release; notes come from `scripts/release-notes.sh`, which joins the CHANGELOG section with `.github/release-install.md`. Don't upload release zips by hand. Releases are ad-hoc signed and not notarized, so the README covers clearing quarantine.
 
 ## Specs (OpenSpec)
 
