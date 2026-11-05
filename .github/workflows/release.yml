@@ -40,7 +40,9 @@ jobs:
       - name: Select Xcode 26.6
         run: sudo xcode-select -s /Applications/Xcode_26.6.app && xcodebuild -version
 
-      - name: Tag matches the app version
+      - name: Tag matches the app version, and the version isn't already released
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           VERSION=$(python3 -c 'import json; print(json.load(open("scripts/xcodeproj-config.json"))["version"])')
           # Semantic Versioning 2.0.0 core and pre-release, without build metadata (a tag has no use for it).
@@ -58,6 +60,19 @@ jobs:
             echo "::notice::Dry run on $GITHUB_REF_NAME: version $VERSION would be released by pushing tag v$VERSION"
           fi
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          # none: no release yet. draft or incomplete: a cancelled run left it unfinished, so finish it.
+          # published: public with its zip, so never replace it.
+          STATE=$(gh api "repos/$GITHUB_REPOSITORY/releases" --paginate --jq ".[] | select(.tag_name == \"v$VERSION\")
+            | if .draft then \"draft\" elif ([.assets[].name] | index(\"MarkdownQuicklook-$VERSION.zip\")) then \"published\" else \"incomplete\" end")
+          STATE=${STATE:-none}
+          echo "RELEASE_STATE=$STATE" >> "$GITHUB_ENV"
+          if [ "$STATE" = published ]; then
+            if [ "$GITHUB_EVENT_NAME" = push ]; then
+              echo "::error::v$VERSION is already published. Bump the version in scripts/xcodeproj-config.json for a new release; a published release is never replaced."
+              exit 1
+            fi
+            echo "::warning::v$VERSION is already published. Bump the version in scripts/xcodeproj-config.json before tagging."
+          fi
           # A pre-release suffix (v0.2.0-beta.1) publishes a GitHub pre-release.
           if [[ "$VERSION" == *-* ]]; then echo "PRERELEASE=--prerelease" >> "$GITHUB_ENV"; else echo "PRERELEASE=" >> "$GITHUB_ENV"; fi
 
@@ -81,13 +96,17 @@ jobs:
         if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
-        # Safe to rerun: if a cancelled or earlier run already created the release, replace its zip and notes.
+        # Created as a draft and made public only after the zip is attached, so a cancelled run leaves
+        # a draft. A rerun finishes a draft or incomplete release; a published one stops at the check above.
         run: |
           ZIP="build/release/MarkdownQuicklook-$VERSION.zip"
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
-            gh release edit "$GITHUB_REF_NAME" --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md $PRERELEASE
-          else
-            gh release create "$GITHUB_REF_NAME" "$ZIP" \
-              --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md --verify-tag $PRERELEASE
-          fi
+          case "$RELEASE_STATE" in
+            none)
+              gh release create "$GITHUB_REF_NAME" "$ZIP" --draft \
+                --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md --verify-tag $PRERELEASE ;;
+            draft|incomplete)
+              gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber ;;
+            *)
+              echo "::error::Unexpected release state $RELEASE_STATE"; exit 1 ;;
+          esac
+          gh release edit "$GITHUB_REF_NAME" --title "MarkdownQuicklook $VERSION" --notes-file build/release/notes.md $PRERELEASE --draft=false

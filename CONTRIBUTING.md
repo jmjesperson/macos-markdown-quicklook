@@ -63,7 +63,11 @@ GitHub doesn't let a pull request's author approve it, so the maintainer merges 
 
 To rehearse a release first, run the workflow by hand: `gh workflow run release.yml --ref <branch>`, or **Actions › Release › Run workflow**. A manual run does everything except publish, and keeps the zip and notes as a downloadable artifact for 7 days.
 
+Run a dry run in two cases only: on the branch of a pull request that changes `.github/workflows/release.yml`, and on `main` just before tagging. Other pull requests don't need one. Their CI already runs the tests and the release build, and a dry run would run the same CI a second time.
+
 The Release workflow reruns CI and checks that the tag matches the version. It then builds the zip and publishes the release with notes from `CHANGELOG.md`. A tag with a suffix, such as `v0.2.0-beta.1`, publishes a pre-release. Don't upload release zips by hand.
+
+A published release is never replaced. Tagging a version that's already out fails the run, and a dry run warns you to bump the version first. The release is created as a draft and made public only once the zip is attached. If a run is cancelled partway through, re-running it finishes the draft.
 
 ### When CI is broken by something outside the code
 
