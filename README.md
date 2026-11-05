@@ -44,11 +44,19 @@ scripts/build-release.sh
 
 This archives the app, signs it ad hoc, checks that the extension is sandboxed and that no debug entitlement shipped, and writes `build/release/MarkdownQuicklook-<version>.zip`.
 
+## Workflow and releases
+
+The project uses GitHub flow: `main` is always releasable, and every change lands through a pull request from a short-lived branch.
+
+- **Pull requests and pushes to `main`** run [`ci.yml`](.github/workflows/ci.yml) on a GitHub macOS runner with Xcode 26.6. It checks the Xcode project matches its generator config, runs the renderer tests, and runs `scripts/build-release.sh`.
+- **A `v*` tag** runs [`release.yml`](.github/workflows/release.yml). It reruns CI on the tagged commit and checks the tag matches the app version. Then it builds the zip and publishes a GitHub release, with notes from that version's `CHANGELOG.md` section (`scripts/release-notes.sh`). If CI fails, nothing is built or uploaded.
+
 To release a new version:
 
-1. Set `version` in `scripts/xcodeproj-config.json` and regenerate the project with `scripts/generate-xcodeproj.py MarkdownQuicklook.xcodeproj "$(cat scripts/xcodeproj-config.json)"`.
+1. On a branch, set `version` in `scripts/xcodeproj-config.json` and regenerate the project with `scripts/generate-xcodeproj.py MarkdownQuicklook.xcodeproj "$(cat scripts/xcodeproj-config.json)"`.
 2. Move the `[Unreleased]` notes in `CHANGELOG.md` under a new version heading with the date.
-3. Run `scripts/build-release.sh`, commit, tag `v<version>`, and attach the zip to a GitHub release with the changelog notes.
+3. Open a pull request, and merge it once CI passes.
+4. Tag the merge commit on `main` and push the tag: `git tag -a v<version> -m "MarkdownQuicklook <version>" && git push origin v<version>`. The release workflow does the rest.
 
 ## Contributor prerequisites
 
@@ -100,7 +108,7 @@ PreviewExtension/           Quick Look preview extension (data-based HTML reply)
 Packages/MarkdownRenderer/  markdown → HTML page, with bundled CSS and JS, and its tests
 docs/                       support table, spike notes, third-party notices
 qa/                         files for checking previews by hand in Quick Look
-scripts/                    build-release.sh; make-app-icon.sh (redraws the app icon from make-icon.swift);
+scripts/                    build-release.sh; release-notes.sh; make-app-icon.sh (redraws the app icon from make-icon.swift);
                             generate-xcodeproj.py and xcodeproj-config.json (write the Xcode project)
 openspec/                   change proposals and specs
 ```
