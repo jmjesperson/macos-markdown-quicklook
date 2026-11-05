@@ -20,7 +20,7 @@ Results of task group 1 of the `add-markdown-quicklook-preview` change, run on 2
 | Does `<script src="cid:…">` load an attached script? | Yes. | Mermaid attached as `cid:mermaid.js` rendered the flowchart (screenshot). |
 | Can the extension read a sibling image with the template's entitlements? | No. | `Data(contentsOf:)` on `img/sibling.png` failed with `NSCocoaErrorDomain` 257 (permission denied). |
 | Does `<img src="img/sibling.png">` (a relative path, no attachment) load? | No, with any entitlement tried. | `naturalWidth` 0 in every run. Relative images must be read in Swift and attached. |
-| Does a web link open the browser when clicked? | Yes, under `qlmanage -p`. | A synthetic click on `https://example.com/` made the default browser (Brave) frontmost. `[UNVERIFIED — same click in a Finder space-bar preview; Jonny to try once]` |
+| Does a web link open the browser when clicked? | Yes, under `qlmanage -p`. | A synthetic click on `https://example.com/` made the default browser (Brave) frontmost. `[UNVERIFIED — same click in a Finder space-bar preview; @jmjesperson to try once]` |
 
 ## Mermaid: inlined versus attached (task 1.4)
 

@@ -2,12 +2,12 @@
 
 ## Why
 
-Pressing space on a README or other developer-documentation markdown file in Finder should show it the way GitHub shows it, including inline Mermaid diagrams. The best-known free option, QLMarkdown (https://github.com/sbarex/QLMarkdown), shows an "about" footer by default and a hardcoded "buy me a coffee" message on every 100th preview that no setting removes (https://github.com/sbarex/QLMarkdown/issues/192), and its Mermaid support loads the library from a CDN by default. Jonny wants his own previewer with no branding, offline diagrams, and GitHub's rendering as the baseline; he is also using this project to evaluate OpenSpec for AI-driven feature development.
+Pressing space on a README or other developer-documentation markdown file in Finder should show it the way GitHub shows it, including inline Mermaid diagrams. The best-known free option, QLMarkdown (https://github.com/sbarex/QLMarkdown), shows an "about" footer by default and a hardcoded "buy me a coffee" message on every 100th preview that no setting removes (https://github.com/sbarex/QLMarkdown/issues/192), and its Mermaid support loads the library from a CDN by default. @jmjesperson wants his own previewer with no branding, offline diagrams, and GitHub's rendering as the baseline; he is also using this project to evaluate OpenSpec for AI-driven feature development.
 
 ## What Changes
 
 - New macOS app whose only job is to carry and register a Quick Look preview extension for markdown files (Apple's data-based preview extension model, macOS 12+: https://developer.apple.com/documentation/quicklookui/qlpreviewprovider).
-- The extension renders every markdown element GitHub documents for markdown files, as listed element by element in `docs/markdown-support.md`, except math, GeoJSON, TopoJSON and STL, which Jonny deferred on 2026-11-05.
+- The extension renders every markdown element GitHub documents for markdown files, as listed element by element in `docs/markdown-support.md`, except math, GeoJSON, TopoJSON and STL, which @jmjesperson deferred on 2026-11-05.
 - Mermaid diagrams in fenced `mermaid` blocks render inline, offline, from a library bundled in the app.
 - GitHub's visual style, following the system light or dark appearance.
 - No footer, watermark, nag, telemetry or network dependency for rendering.

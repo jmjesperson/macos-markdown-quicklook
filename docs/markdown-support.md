@@ -1,6 +1,6 @@
 # Markdown support
 
-What GitHub renders in a `.md` file, element by element, and what this Quick Look extension renders. v1 must render everything GitHub documents for markdown files, except the items Jonny moved to Later on 2026-11-05 (math, GeoJSON, TopoJSON, STL).
+What GitHub renders in a `.md` file, element by element, and what this Quick Look extension renders. v1 must render everything GitHub documents for markdown files, except the items @jmjesperson moved to Later on 2026-11-05 (math, GeoJSON, TopoJSON, STL).
 
 **Status values:** **v1** (rendered as GitHub does), **Partial** (shown, but one part can't work in a local preview; the reason is in Notes), **Later** (not in v1), **No** (does not apply to a local markdown file).
 
@@ -54,7 +54,7 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 
 | Element | Example | GitHub | Status | Notes |
 |---|---|---|---|---|
-| Inline links | `[text](https://…)` | Yes [B] | Partial | Rendered as links. In the 2026-11-05 spike a click under `qlmanage -p` opened the default browser (`docs/spike-notes.md`); the Finder space-bar preview is `[UNVERIFIED — Jonny to click a link once]`. MarkEdit reports links do not open from its web-view preview (https://github.com/MarkEdit-app/MarkEdit/issues/1718). |
+| Inline links | `[text](https://…)` | Yes [B] | Partial | Rendered as links. In the 2026-11-05 spike a click under `qlmanage -p` opened the default browser (`docs/spike-notes.md`); the Finder space-bar preview is `[UNVERIFIED — @jmjesperson to click a link once]`. MarkEdit reports links do not open from its web-view preview (https://github.com/MarkEdit-app/MarkEdit/issues/1718). |
 | Autolinked URLs | `https://example.com` | Yes [B] | v1 | GFM extension in cmark-gfm. Same click caveat as inline links. |
 | Relative links to files | `[guide](docs/guide.md)` | Yes [B] | Partial | Shown as links. Opening another file from a preview is not expected to work. |
 | Images | `![alt](https://…)` | Yes [B] | Partial | Remote `https:` images load: the extension holds the network-client entitlement and the page's policy admits `https:` images (checked in Quick Look on 2026-11-05). `http:` images are blocked by that policy. They are fetched from the image's host directly, where GitHub proxies them through its own image cache. |
@@ -79,10 +79,10 @@ What GitHub renders in a `.md` file, element by element, and what this Quick Loo
 | Element | Example | GitHub | Status | Notes |
 |---|---|---|---|---|
 | Mermaid | ```` ```mermaid ```` | Yes [D] | v1 | Bundled, offline, loaded only when a mermaid block is present. |
-| GeoJSON maps | ```` ```geojson ```` | Yes [D] | Later | Jonny, 2026-11-05. |
-| TopoJSON maps | ```` ```topojson ```` | Yes [D] | Later | Jonny, 2026-11-05. |
-| STL 3D models | ```` ```stl ```` | Yes [D] | Later | Jonny, 2026-11-05. |
-| Math | `$x$`, `$$…$$`, ```` ```math ```` | Yes, rendered with MathJax [M] | Later | Jonny, 2026-11-05. |
+| GeoJSON maps | ```` ```geojson ```` | Yes [D] | Later | @jmjesperson, 2026-11-05. |
+| TopoJSON maps | ```` ```topojson ```` | Yes [D] | Later | @jmjesperson, 2026-11-05. |
+| STL 3D models | ```` ```stl ```` | Yes [D] | Later | @jmjesperson, 2026-11-05. |
+| Math | `$x$`, `$$…$$`, ```` ```math ```` | Yes, rendered with MathJax [M] | Later | @jmjesperson, 2026-11-05. |
 
 ## Front matter
 

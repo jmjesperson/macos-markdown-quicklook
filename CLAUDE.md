@@ -88,11 +88,13 @@ All live in `Sources/MarkdownRenderer/Resources/`: github-markdown-css, highligh
 
 ## Workflow (read CONTRIBUTING.md)
 
-`CONTRIBUTING.md` is the source of truth for how changes reach `main` and how releases happen. The maintainer workflow there is the one to follow when working with Jonny. In short:
+The maintainer is GitHub user @jmjesperson. In this project, refer to them by that username, in files, commits and pull requests, never by first name. `LICENSE` keeps the copyright holder's legal name.
+
+`CONTRIBUTING.md` is the source of truth for how changes reach `main` and how releases happen. The maintainer workflow there is the one to follow when working with @jmjesperson. In short:
 
 - **Always work on a branch** (`<type>/<short-name>`) and open a pull request. `main` rejects direct pushes and force pushes for everyone, admins included.
-- **CI must be green first.** Merge Jonny's pull requests with `gh pr merge --admin --squash --delete-branch` only after "Test and build" has passed (`gh pr checks --watch`). `--admin` exists only because GitHub won't let an author approve their own pull request. It isn't a way around failing checks.
-- **Ask Jonny first** before merging, tagging a release, or changing repository settings or rulesets. Above all, ask before pausing the checks ruleset (the broken-CI procedure in `CONTRIBUTING.md`).
+- **CI must be green first.** Merge @jmjesperson's pull requests with `gh pr merge --admin --squash --delete-branch` only after "Test and build" has passed (`gh pr checks --watch`). `--admin` exists only because GitHub won't let an author approve their own pull request. It isn't a way around failing checks.
+- **Ask @jmjesperson first** before merging, tagging a release, or changing repository settings or rulesets. Above all, ask before pausing the checks ruleset (the broken-CI procedure in `CONTRIBUTING.md`).
 - **Keep things current:** add user-visible changes to `[Unreleased]` in `CHANGELOG.md`, and keep `docs/markdown-support.md` in step with rendering changes.
 - **Releases come only from the Release workflow:** push a `vX.Y.Z` tag after the version-bump PR merges. `.github/workflows/release.yml` reruns CI, checks the tag matches `scripts/xcodeproj-config.json`, builds the zip, and publishes the release with notes from `scripts/release-notes.sh`, which combines the CHANGELOG section with `.github/release-install.md`. Releases are ad-hoc signed and not notarized, so the README covers clearing quarantine.
 
