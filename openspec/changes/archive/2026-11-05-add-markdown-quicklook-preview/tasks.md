@@ -2,7 +2,7 @@
 
 ## 1. Toolchain and spike (throwaway; answers design decisions 2, 5 and 9)
 
-- [x] 1.1 Ask Jonny to run `sudo xcode-select -s /Applications/Xcode.app`, then verify `xcodebuild -version` prints an Xcode version
+- [x] 1.1 Ask @jmjesperson to run `sudo xcode-select -s /Applications/Xcode.app`, then verify `xcodebuild -version` prints an Xcode version
 - [x] 1.2 In a scratch Xcode project, create a macOS App with an embedded Quick Look Preview Extension from Xcode's template, set `QLIsDataBasedPreview` true and `QLSupportedContentTypes` to `net.daringfireball.markdown`, add `com.apple.security.network.client`, and verify `qlmanage -p sample.md` shows the extension's HTML instead of plain text
 - [x] 1.3 Add a bundled script that writes into the page, a `prefers-color-scheme` rule and a `cid:` image attachment, then verify in Light and Dark appearance that all three work; if the script does not run, switch the spike to a view-based `WKWebView` extension and verify the same three
 - [x] 1.4 Load the pinned `mermaid.min.js` both inlined and as an attachment, render one flowchart, and record time-to-diagram for each in `docs/spike-notes.md`
@@ -51,12 +51,12 @@
 - [x] 7.1 Wire `PreviewExtension` to read the file, call `MarkdownRenderer` and return the reply, and verify `qlmanage -p` renders `.md` and `.markdown` fixtures
 - [x] 7.2 Build the host app's status window (extension enabled or not, and where in System Settings to enable it), and verify both states by toggling the extension
 - [x] 7.3 Verify no footer, banner or render counter exists by previewing 101 files in a loop and checking the last page holds only document content
-- [x] 7.4 Verify that previewing a file with no remote images makes no outbound connection and renders offline. Verified 2026-11-05: the app, extension and renderer contain no networking code; the page's Content Security Policy (`default-src 'none'`) admits only nonce-bearing bundled scripts and styles and `cid:`, `data:` and `https:` images, so only a remote image in the file can reach the network; the bundled init scripts hold no URLs; and Jonny previewed `qa/diagrams/three-diagrams.md` with Wi-Fi off and saw the text, the flowchart, the invalid diagram's error and the sequence diagram. `nettop` was dropped because it could not attribute Quick Look's web traffic, even for a control that did load a remote image.
+- [x] 7.4 Verify that previewing a file with no remote images makes no outbound connection and renders offline. Verified 2026-11-05: the app, extension and renderer contain no networking code; the page's Content Security Policy (`default-src 'none'`) admits only nonce-bearing bundled scripts and styles and `cid:`, `data:` and `https:` images, so only a remote image in the file can reach the network; the bundled init scripts hold no URLs; and @jmjesperson previewed `qa/diagrams/three-diagrams.md` with Wi-Fi off and saw the text, the flowchart, the invalid diagram's error and the sequence diagram. `nettop` was dropped because it could not attribute Quick Look's web traffic, even for a control that did load a remote image.
 
 ## 8. Distribution
 
 - [x] 8.1 Write `scripts/build-release.sh` (archive, ad-hoc sign, zip) and verify it produces a zip whose app launches
-- [x] 8.2 Document install steps (move to `/Applications`, clear quarantine or approve in System Settings, launch once, check with `pluginkit`) in the README. Jonny accepted the README alone on 2026-11-05; the second-account check moved to Workflow follow-up.
+- [x] 8.2 Document install steps (move to `/Applications`, clear quarantine or approve in System Settings, launch once, check with `pluginkit`) in the README. @jmjesperson accepted the README alone on 2026-11-05; the second-account check moved to Workflow follow-up.
 
 ## 9. Integration checks
 
@@ -80,7 +80,7 @@
 
 ## Workflow follow-up
 
-- Archive the change after Jonny has reviewed the implementation.
-- Former task 9.1, deferred by Jonny on 2026-11-05 as not critical yet: preview `qa/conformance.md` (one example of every v1 and Partial row in `docs/markdown-support.md`), compare it side by side with the same file on github.com, and record any differences as bugs or table updates.
+- Archive the change after @jmjesperson has reviewed the implementation.
+- Former task 9.1, deferred by @jmjesperson on 2026-11-05 as not critical yet: preview `qa/conformance.md` (one example of every v1 and Partial row in `docs/markdown-support.md`), compare it side by side with the same file on github.com, and record any differences as bugs or table updates.
 - Former second half of task 8.2: verify the README install steps by downloading the release zip through a browser onto a second macOS user account.
 - Open separate changes for math, maps (GeoJSON, TopoJSON), STL, signing and notarization, and Finder thumbnails.

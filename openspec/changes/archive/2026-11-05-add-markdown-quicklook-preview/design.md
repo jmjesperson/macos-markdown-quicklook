@@ -91,7 +91,7 @@ Apple's APIs go back to macOS 12, but testing happens on macOS 26 and the audien
 
 ### 12. The host app is not sandboxed
 
-The spec requires the host app to say whether the extension is enabled. macOS has no public API for that, and the only source, `pluginkit -m -i <id>`, refuses the query from inside App Sandbox with `match: unauthorized discovery flag (PKDiscoverAll)` (tested 2026-11-05 on macOS 26.5.1). Unsandboxed, the same call returns the election tag (`+`, `-`, `=` or none). Jonny chose on 2026-11-05 to drop the sandbox from the host app only. The host app reads no user files and makes no network calls; the extension, which renders files, keeps App Sandbox. Distribution outside the Mac App Store doesn't need a sandboxed host. **Alternative considered:** keep both sandboxed and have the window always show where to enable the extension, which would mean narrowing the spec.
+The spec requires the host app to say whether the extension is enabled. macOS has no public API for that, and the only source, `pluginkit -m -i <id>`, refuses the query from inside App Sandbox with `match: unauthorized discovery flag (PKDiscoverAll)` (tested 2026-11-05 on macOS 26.5.1). Unsandboxed, the same call returns the election tag (`+`, `-`, `=` or none). @jmjesperson chose on 2026-11-05 to drop the sandbox from the host app only. The host app reads no user files and makes no network calls; the extension, which renders files, keeps App Sandbox. Distribution outside the Mac App Store doesn't need a sandboxed host. **Alternative considered:** keep both sandboxed and have the window always show where to enable the extension, which would mean narrowing the spec.
 
 ## Risks / Trade-offs
 

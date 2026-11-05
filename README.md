@@ -46,10 +46,11 @@ This archives the app, signs it ad hoc, checks that the extension is sandboxed a
 
 ## Workflow and releases
 
-The project uses GitHub flow: `main` is always releasable, and every change lands through a pull request from a short-lived branch.
+The project uses GitHub flow: `main` is always releasable, and every change lands through a pull request from a short-lived branch. The step-by-step workflow, for the maintainer and for outside contributors, is in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 - **Pull requests and pushes to `main`** run [`ci.yml`](.github/workflows/ci.yml) on a GitHub macOS runner with Xcode 26.6. It checks the Xcode project matches its generator config, runs the renderer tests, and runs `scripts/build-release.sh`.
 - **A `vMAJOR.MINOR.PATCH` tag** (for example `v0.2.0`, or `v0.2.0-beta.1` for a pre-release) runs [`release.yml`](.github/workflows/release.yml). It reruns CI on the tagged commit and checks the tag matches the app version. Then it builds the zip and publishes a GitHub release, with notes from that version's `CHANGELOG.md` section (`scripts/release-notes.sh`). If CI fails, nothing is built or uploaded.
+- **`main` is protected by two rulesets.** Every change needs a pull request with a passing "Test and build" check. Force pushes and deleting `main` are blocked. Pull requests also need approval from the code owner (`.github/CODEOWNERS`, @jmjesperson). GitHub doesn't let an author approve their own pull request, so the owner merges their own with the admin bypass (`gh pr merge --admin`), which skips only the approval; the checks still apply.
 - **A newer run for the same trigger cancels the one in progress:** another push to the same PR, another push to `main`, or the same tag pushed again. Publishing is safe to rerun: if the release already exists, its zip and notes are replaced.
 
 To release a new version:
