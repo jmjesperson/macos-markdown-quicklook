@@ -13,7 +13,7 @@
 
 - [ ] 2.1 Create `MarkdownPreview.xcodeproj` with the `App` and `PreviewExtension` targets from Xcode's templates, deployment target macOS 15, App Sandbox on both, and verify `xcodebuild -scheme MarkdownPreview build` succeeds
 - [ ] 2.2 Create the `Packages/MarkdownRenderer` Swift package depending on `swift-markdown` (pinned), link it into `PreviewExtension`, and verify `swift test --package-path Packages/MarkdownRenderer` runs one passing placeholder test
-- [ ] 2.3 Add `README.md` covering what the app does, how to build it and how to run the tests, and verify each documented command runs as written
+- [ ] 2.3 Add `README.md` covering what the app does, contributor prerequisites (full Xcode selected with `xcode-select`; OpenSpec installed with Homebrew, `brew install openspec`, which runs on Homebrew's own Node, so no project Node pin is needed), how to build it and how to run the tests, and verify each documented command runs as written
 
 ## 3. Markdown rendering core
 
