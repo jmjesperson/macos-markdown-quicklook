@@ -65,6 +65,8 @@ To rehearse a release first, run the workflow by hand: `gh workflow run release.
 
 The Release workflow reruns CI and checks that the tag matches the version. It then builds the zip and publishes the release with notes from `CHANGELOG.md`. A tag with a suffix, such as `v0.2.0-beta.1`, publishes a pre-release. Don't upload release zips by hand.
 
+A published release is never replaced. Tagging a version that's already out fails the run, and a dry run warns you to bump the version first. The release is created as a draft and made public only once the zip is attached. If a run is cancelled partway through, re-running it finishes the draft.
+
 ### When CI is broken by something outside the code
 
 If "Test and build" fails because of the runner (for example, GitHub removes Xcode 26.6), nothing can merge. Fix `.github/workflows/ci.yml` in a pull request if you can. If the fix itself can't pass, pause the checks ruleset, merge, and turn it back on straight away:
