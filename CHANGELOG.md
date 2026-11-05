@@ -4,6 +4,10 @@ All notable changes to MarkdownQuicklook are recorded here. The format follows [
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-05
+
+First release.
+
 ### Added
 
 - Quick Look preview for `.md` and `.markdown` files, rendered the way GitHub renders markdown: GitHub Flavored Markdown (tables, task lists, strikethrough, autolinks, footnotes), heading anchors, alerts, emoji shortcodes, front matter as a table, and the HTML GitHub allows.
@@ -22,4 +26,5 @@ All notable changes to MarkdownQuicklook are recorded here. The format follows [
 - Images outside your home folder, images over 10 MB, and images past a 50 MB total for one file show as alt text.
 - Releases are not signed with an Apple Developer ID or notarized. See the README for how to install them.
 
-[Unreleased]: https://github.com/jmjesperson/macos-markdown-quicklook/commits/main
+[Unreleased]: https://github.com/jmjesperson/macos-markdown-quicklook/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jmjesperson/macos-markdown-quicklook/releases/tag/v0.1.0

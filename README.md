@@ -10,7 +10,7 @@ What renders, element by element, is listed in [`docs/markdown-support.md`](docs
 
 Releases are not signed with an Apple Developer ID or notarized, so macOS blocks them the first time. To install:
 
-1. Download `MarkdownQuicklook-<version>.zip` from the GitHub Releases page and unzip it. Safari unzips it for you.
+1. Download `MarkdownQuicklook-<version>.zip` from the [Releases page](https://github.com/jmjesperson/macos-markdown-quicklook/releases) and unzip it. Safari unzips it for you.
 2. Move `MarkdownQuicklook.app` to `/Applications`.
 3. Clear the download quarantine. Either run:
 
@@ -43,6 +43,12 @@ scripts/build-release.sh
 ```
 
 This archives the app, signs it ad hoc, checks that the extension is sandboxed and that no debug entitlement shipped, and writes `build/release/MarkdownQuicklook-<version>.zip`.
+
+To release a new version:
+
+1. Set `version` in `scripts/xcodeproj-config.json` and regenerate the project with `scripts/generate-xcodeproj.py MarkdownQuicklook.xcodeproj "$(cat scripts/xcodeproj-config.json)"`.
+2. Move the `[Unreleased]` notes in `CHANGELOG.md` under a new version heading with the date.
+3. Run `scripts/build-release.sh`, commit, tag `v<version>`, and attach the zip to a GitHub release with the changelog notes.
 
 ## Contributor prerequisites
 
@@ -94,7 +100,8 @@ PreviewExtension/           Quick Look preview extension (data-based HTML reply)
 Packages/MarkdownRenderer/  markdown → HTML page, with bundled CSS and JS, and its tests
 docs/                       support table, spike notes, third-party notices
 qa/                         files for checking previews by hand in Quick Look
-scripts/                    build-release.sh; make-app-icon.sh (redraws the app icon from make-icon.swift)
+scripts/                    build-release.sh; make-app-icon.sh (redraws the app icon from make-icon.swift);
+                            generate-xcodeproj.py and xcodeproj-config.json (write the Xcode project)
 openspec/                   change proposals and specs
 ```
 
