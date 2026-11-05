@@ -1,5 +1,10 @@
 # MarkdownQuicklook
 
+[![CI](https://github.com/jmjesperson/macos-markdown-quicklook/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jmjesperson/macos-markdown-quicklook/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/jmjesperson/macos-markdown-quicklook)](https://github.com/jmjesperson/macos-markdown-quicklook/releases/latest)
+![macOS 15+](https://img.shields.io/badge/macOS-15%2B-blue?logo=apple)
+[![License: MIT](https://img.shields.io/github/license/jmjesperson/macos-markdown-quicklook)](LICENSE)
+
 A macOS Quick Look extension that shows markdown files the way GitHub shows them. Select a `.md` or `.markdown` file in Finder and press space to see rendered headings, tables, task lists, alerts, syntax-highlighted code and inline Mermaid diagrams, in GitHub's light or dark style to match your system. Everything it needs is bundled, so it works offline, and the preview shows only your document: no footer, banner or donation message.
 
 The app itself only carries the extension and tells you whether it's enabled.
