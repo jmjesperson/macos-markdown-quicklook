@@ -4,6 +4,10 @@ All notable changes to MarkdownQuicklook are recorded here. The format follows [
 
 ## [Unreleased]
 
+### Fixed
+
+- Mermaid diagrams with a line break (`<br/>`) in a label now render. Before, the preview showed a parser error in place of the diagram.
+
 ## [0.1.0] - 2026-11-05
 
 First release.

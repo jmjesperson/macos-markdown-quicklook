@@ -7,8 +7,12 @@
   var blocks = Array.prototype.slice.call(document.querySelectorAll('.mermaid-diagram'));
 
   function place(block, svgText) {
-    var doc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
-    var svg = doc.documentElement;
+    // Parse as HTML, not XML: Mermaid writes a <br/> in a label as an unclosed <br>, which the XML parser
+    // rejects, returning its error page instead of throwing. Template content is inert until inserted.
+    var template = document.createElement('template');
+    template.innerHTML = svgText;
+    var svg = template.content.querySelector('svg');
+    if (!svg) { throw new Error('Mermaid returned no SVG'); }
     // The page's Content Security Policy only admits styles carrying its nonce.
     Array.prototype.forEach.call(svg.querySelectorAll('style'), function (s) { if (nonce) s.setAttribute('nonce', nonce); });
     var node = document.importNode(svg, true);
