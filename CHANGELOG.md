@@ -4,6 +4,8 @@ All notable changes to MarkdownQuicklook are recorded here. The format follows [
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-19
+
 ### Fixed
 
 - Mermaid diagrams with a line break (`<br/>`) in a label now render. Before, the preview showed a parser error in place of the diagram.
@@ -30,5 +32,6 @@ First release.
 - Images outside your home folder, images over 10 MB, and images past a 50 MB total for one file show as alt text.
 - Releases are not signed with an Apple Developer ID or notarized. See the README for how to install them.
 
-[Unreleased]: https://github.com/jmjesperson/macos-markdown-quicklook/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/jmjesperson/macos-markdown-quicklook/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/jmjesperson/macos-markdown-quicklook/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/jmjesperson/macos-markdown-quicklook/releases/tag/v0.1.0
